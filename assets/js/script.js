@@ -1,18 +1,12 @@
-const category = "music"
-const limit = 20
-const url = 'https://trivia-by-api-ninjas.p.rapidapi.com/v1/trivia?category='+category+"&limit="+limit;
-const options = {
-	method: 'GET',
-	headers: {
-		'X-RapidAPI-Key': '90b033c257msha3ee08c8beb2838p1df284jsnd3b056d7391a',
-		'X-RapidAPI-Host': 'trivia-by-api-ninjas.p.rapidapi.com'
-	}
-};
+const category = 9
+const amount = 10
+const difficulty = "medium"
+const url = 'https://opentdb.com/api.php?amount='+amount+'&category='+category+'&difficulty='+difficulty;
 
-fetch(url, options).then(function(response){
-    response.json().then(function(result){
-        console.log(result)
 
-        console.log(result[0].answer)
+fetch(url).then(function(response){
+    response.json().then(function(rawResult){
+        const results = rawResult.results
+        console.log(results)
     })
 })
