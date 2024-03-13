@@ -1,14 +1,18 @@
-const settings = {
-	async: true,
-	crossDomain: true,
-	url: 'https://trivia-by-api-ninjas.p.rapidapi.com/v1/trivia',
+const category = "music"
+const limit = 20
+const url = 'https://trivia-by-api-ninjas.p.rapidapi.com/v1/trivia?category='+category+"&limit="+limit;
+const options = {
 	method: 'GET',
 	headers: {
-		'X-RapidAPI-Key': 'ba151ed912msh57f6efac4ca623cp1768e5jsn4be1685ac01d',
+		'X-RapidAPI-Key': '90b033c257msha3ee08c8beb2838p1df284jsnd3b056d7391a',
 		'X-RapidAPI-Host': 'trivia-by-api-ninjas.p.rapidapi.com'
 	}
 };
 
-$.ajax(settings).done(function (response) {
-	console.log(response);
-});
+fetch(url, options).then(function(response){
+    response.json().then(function(result){
+        console.log(result)
+
+        console.log(result[0].answer)
+    })
+})
