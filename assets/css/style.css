@@ -19,7 +19,37 @@ body {
     color: aliceblue;
 }
 
-select .Categories { text-align: center;}
+select .Categories {
+    text-align-last:right;
+    padding-right: 29px;
+    direction: rtl;
+}
+
+#button {
+    font-size: 1.8rem;
+    padding: 1rem 0;
+    width: 10rem;
+    text-align: center;
+    margin-top: 2.5%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0.1rem solid #C295FF;
+    margin-bottom: 1rem;
+    text-decoration: none;
+    color: #C295FF;
+    background-color: white;
+}
+#button:hover {
+    cursor: pointer;
+    box-shadow: 0 0.4rem 1.4rem 0 #872BFF ;
+    transform: translateY(-0.1rem);
+    transition: transform 150ms;
+}
+#button [disabled]:hover {
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
 
 .light {
   height: 100%;
