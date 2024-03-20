@@ -12,7 +12,7 @@ const SHEET_OPTIONS = {
     },
 }
 
-const playButton = document.querySelector("#play")
+const playButton = document.querySelector("#button")
 const difficultySelect = document.querySelector("#Difficulty")
 
 async function getSheetQuestions() {
@@ -29,8 +29,14 @@ async function getSheetQuestions() {
 
 getSheetQuestions()
 
-async function getTriviaQuestions(amount, category, difficulty) {
-    const triviaUrl = 'https://opentdb.com/api.php?type=multiple&amount='+amount+'&category='+category+'&difficulty='+difficulty;
+async function getTriviaQuestions(amount, categoryNumber, difficulty) {
+    let category = ""
+    if (categoryNumber) {
+        category = "&category=" + categoryNumber
+    }
+
+    const triviaUrl = `https://opentdb.com/api.php?amount=${amount}&type=multiple&difficulty=${difficulty}`+category;
+    console.log(triviaUrl)
 
     const responce = await fetch(triviaUrl)
     const result = await responce.json()
