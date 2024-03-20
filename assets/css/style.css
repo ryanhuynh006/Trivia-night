@@ -19,7 +19,7 @@ body {
     color: aliceblue;
 }
 
-select .Categories {
+select .categories {
     text-align-last:right;
     padding-right: 29px;
     direction: rtl;
@@ -46,6 +46,32 @@ select .Categories {
     transition: transform 150ms;
 }
 #button [disabled]:hover {
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+#custom {
+    font-size: 1rem;
+    padding: 1rem 0;
+    width: 10rem;
+    text-align: center;
+    margin-top: 0%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0.1rem solid #C295FF;
+    margin-bottom: .5rem;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #424472;
+}
+#custom:hover {
+    cursor: pointer;
+    box-shadow: 0 0.4rem 1.4rem 0 #872BFF ;
+    transform: translateY(-0.1rem);
+    transition: transform 150ms;
+}
+#custom [disabled]:hover {
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
@@ -118,11 +144,18 @@ h1 {
     font-family: "Honk", sans-serif;
 }
 
-h2, h3, h4, h5, h6 {
+h2 {
     margin: 20px;
     font-size: 200%;
     font-family: "Honk", sans-serif;
   }
+
+h3 {
+    margin-top: 40px;
+    font-size: 100%;
+    font-family: "Press Start 2P", sans-serif;
+  }
+
 
 #dropdown-menu {
     background-color: #f8f9fa;
