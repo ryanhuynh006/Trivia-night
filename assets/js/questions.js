@@ -69,14 +69,16 @@ async function loadQuestions(categoryNumber, difficulty) {
     const responce = await fetch(triviaUrl)
     
     if (!responce || !responce.ok) {
-        console.warn("Failed to load question");
+        alert("Failed to load question!");
+        window.location.href = "index.html";
     }
 
     const result = await responce.json()
     const triviaArray = result.results
 
     if (triviaArray.length == 0) {
-        console.warn("No available questions!");
+        alert("No available questions!");
+        window.location.href = "index.html";
     }
 
     loadedQuestions = triviaArray
