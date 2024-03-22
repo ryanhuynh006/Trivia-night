@@ -1,0 +1,122 @@
+* {
+    padding-top: 0;
+    box-sizing: border-box;
+    font-family: "Pixelify Sans", sans-serif;
+}
+
+html {
+    background-image: linear-gradient(#211f23, #5a4272);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+div.trivia-game {
+    width: 100%;
+    height: 100%;
+}
+
+h2 {
+    display: flex;
+    justify-content: center;
+    font-size: 200%;
+    color: #FFF38B;
+}
+
+#trivia-question {
+  font-family: "Honk", sans-serif;
+  font-size: 35px;
+}
+
+.choice-container {
+    box-sizing: border-box;
+    padding: 15px;
+    float: left;
+    width: 50%;
+    height: 50%;
+}
+
+button[class*="choice"] {
+  font-family: "Pixelify Sans", sans-serif;
+  font-size: 20px;
+  height: 40px;
+}
+
+button[class*="choice"]:hover {
+  background-color: green;
+}
+
+.round-time-bar {
+  margin-top: 200px;
+  position: relative;
+  align-self: center;
+}
+
+.round-time-bar div {
+  height: 10px;
+  width: 600px;
+  background: linear-gradient(to bottom, red, #900);
+}
+
+.light {
+    height: 100%;
+    width: 100%;
+    &:after, &:before {
+      content: "";
+      display: block;
+      position: absolute;
+    }
+    &:before {
+      width: 120%;
+      height: 120%;
+      top: 40%;
+      left: -25%;
+      background: radial-gradient(48.58% 48.58% at 49.96% 59.07%, #927CFF 0%, rgba(142, 133, 190, 0.4) 43.23%, rgba(59, 61, 70, 0) 100%);
+    }
+    &:after {
+      width: 120%;
+      height: 100%;
+      top: 65%;
+      left: 25%;
+      background: radial-gradient(48.58% 48.58% at 49.96% 59.07%, #FFF38B 0%, rgba(180, 174, 113, 0.45) 38.02%, rgba(59, 61, 70, 0) 100%);
+    }
+  }
+  .star1 {
+    animation: 3s linear 1s infinite alternate twinkle;
+  }
+  .star2 {
+    animation: 4s linear 0s infinite alternate twinkle;
+  }
+  .star3 {
+    animation: 3.5s linear 0.5s infinite alternate twinkle;
+  }
+  .star4 {
+    animation: 1.25s linear 1.5s infinite alternate twinkle;
+  }
+  .star5 {
+    animation: 4s linear 2s infinite alternate twinkle;
+  }
+  .star6 {
+    animation: 2.5s linear 1s infinite alternate twinkle;
+  }
+  @keyframes twinkle {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
