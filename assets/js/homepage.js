@@ -2,7 +2,7 @@ const playButton = document.querySelector("#button")
 const submitButton = document.querySelector("#custom")
 const categorySelect = document.querySelector("#Categories")
 const difficultySelect = document.querySelector("#Difficulty")
-const gamemodeSelect = document.querySelector("#Gamemode")
+const gamemodeSelect = document.querySelector("#GameMode")
 
 // Returns an array of custom question
 async function getSheetQuestions(amount) {
