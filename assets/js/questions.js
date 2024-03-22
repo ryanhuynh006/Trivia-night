@@ -14,9 +14,6 @@ const anwserButtons = [
     document.querySelector("#answer-d"),
 ]
 
-let questionNumber = 0
-let loadedQuestions = []
-
 // Returns an array of custom question
 async function loadCustomQuestions() {
     const responce = await fetch(SHEET_URL)
@@ -69,7 +66,7 @@ async function loadQuestions(categoryNumber, difficulty) {
     const responce = await fetch(triviaUrl)
     
     if (!responce || !responce.ok) {
-        alert("Failed to load question!");
+        alert("Failed to load question! (Too many requests)");
         window.location.href = "index.html";
     }
 
@@ -86,20 +83,21 @@ async function loadQuestions(categoryNumber, difficulty) {
     return triviaArray
 }
 
-function loadNextQuestion () {
-    let data = loadedQuestions[questionNumber]
-    console.log(data)
-    questionLabel.textContent = data.question
+for (let i = 0; i < anwserButtons.length; i++) {
+    const answer = anwserButtons[i]
+    answer.addEventListener("click", function(){
+        if (!rightAnswer) {
+            console.warn("Right answer has not been added yet!");
+            return
+        }
 
-    let randomNumber = Math.floor(Math.random() * 4) //between 0 and 3
-    anwserClone = [...anwserButtons];
-
-    anwserClone[randomNumber].textContent = data.correct_answer
-    anwserClone.splice(randomNumber, 1)
-
-    for (let i = 0; i < anwserClone.length; i++) {
-        anwserClone[i].textContent = data.incorrect_answers[i]
-    }
+        if (answer === rightAnswer) {
+            alert("CORRECT")
+            nextQuestion()
+        }else {
+            alert("INCORRECT")
+        }
+    })
 }
 
 //Extract data from URL
@@ -111,6 +109,53 @@ const categoryNumber = searchParams.get("categoryNumber")
 const category = searchParams.get("category")
 const difficulty = searchParams.get("difficulty")
 const gamemode = searchParams.get("gamemode")
+
+function loadNewQuestions() {
+    let loadPromise
+    if (category === "Custom") {
+        console.log("Loading custom question")
+        loadPromise = loadCustomQuestions()
+    } else {
+        console.log("Loading normal question")
+        loadPromise = loadQuestions(categoryNumber, difficulty)
+    }
+    
+    return loadPromise;
+}
+
+function fixText(mystring) {
+    return mystring.replace(/&quot;/g,'"');
+}
+
+let rightAnswer
+let questionNumber = 0
+let loadedQuestions = []
+//Load the right questions based on the category
+function nextQuestion () {
+    //Get page data
+    let data = loadedQuestions[questionNumber]
+
+    if (!data) {
+        questionLabel.textContent = "Loading Trivia Questions"
+        loadNewQuestions().then(nextQuestion)
+    }
+
+    questionLabel.textContent = fixText(data.question)
+
+    let randomNumber = Math.floor(Math.random() * 4) //between 0 and 3
+    anwserClone = [...anwserButtons];
+
+    rightAnswer = anwserClone[randomNumber]
+    rightAnswer.textContent = fixText(data.correct_answer)
+    anwserClone.splice(randomNumber, 1)
+
+    for (let i = 0; i < anwserClone.length; i++) {
+        anwserClone[i].textContent = fixText(data.incorrect_answers[i])
+    }
+
+    //Head to next question
+    questionNumber++;
+}
 
 //Music config
 document.onclick= function(event) {
@@ -126,33 +171,28 @@ document.onclick= function(event) {
     music.play();
 };
 
-//Load the right questions based on the category
-let loadPromise
-if (categoryNumber === "custom") {
-    console.log("Loading custom question")
-    loadPromise = loadCustomQuestions()
-} else {
-    console.log("Loading normal question")
-    loadPromise = loadQuestions(categoryNumber, difficulty)
-}
 
 let countdownBar = document.getElementById('countdown-bar');
 let width = 600; // Initial width of the bar
 
-let interval = setInterval(function() {
-    width--;
-    countdownBar.style.width = width + 'px';
-    if (width == 0) {
-        endGame()
-    }
-}, 100); // Update every 0.1 seconds
+if (gamemode == "Timed") {
+    let interval = setInterval(function() {
+        width--;
+        countdownBar.style.width = width + 'px';
+        if (width == 0) {
+            endGame()
+        }
+    }, 100); // Update every 0.1 seconds
 
-function endGame() {
-    clearInterval(interval);
+    function endGame() {
+        clearInterval(interval);
+        console.log("GAME OVER")
+        alert("GAME OVER")
+        window.location.href = "index.html";
+    }
+} else {
+    countdownBar.style.display = "none"
 }
 
-
 //Wait for questions to load before starting game
-loadPromise.then(() => {
-    loadNextQuestion();
-})
+loadNewQuestions().then(nextQuestion)
