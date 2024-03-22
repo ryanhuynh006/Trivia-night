@@ -60,16 +60,14 @@ async function loadQuestions(categoryNumber, difficulty) {
     const responce = await fetch(triviaUrl)
     
     if (!responce || !responce.ok) {
-        alert("Failed to load questions (try refreshing)");
-        window.location.href = "index.html"
+        console.warn("Failed to load question");
     }
 
     const result = await responce.json()
     const triviaArray = result.results
 
     if (triviaArray.length == 0) {
-        alert("No available questions!");
-        window.location.href = "index.html"
+        console.warn("No available questions!");
     }
 
     loadedQuestions = triviaArray
@@ -79,6 +77,7 @@ async function loadQuestions(categoryNumber, difficulty) {
 const url = new URL(window.location.href);
 const searchParams = new URLSearchParams(url.search);
 
+//In future we can do away with category number for ease of use but for now who cares
 const categoryNumber = searchParams.get("categoryNumber")
 const category = searchParams.get("category")
 const difficulty = searchParams.get("difficulty")
@@ -86,6 +85,7 @@ const gamemode = searchParams.get("gamemode")
 
 console.log(category)
 
+//Load the right questions based on the category
 if (categoryNumber === "custom") {
     console.log("Loading custom question")
     loadCustomQuestions()
@@ -102,6 +102,7 @@ document.onclick= function(event) {
     }else {
         music = document.getElementById("relaxingMusic"); 
     }
+    music.volume = 0.2
 
     music.play();
 };
