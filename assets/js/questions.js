@@ -77,7 +77,7 @@ async function loadQuestions(categoryNumber, difficulty) {
     const triviaArray = result.results
 
     if (triviaArray.length == 0) {
-        alert("No available questions!");
+        alert("No available questions please select different options!");
         window.location.href = "index.html";
     }
 
