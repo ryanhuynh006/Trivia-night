@@ -5,8 +5,8 @@ function randomPosition(min, max) {
 }
 const body = document.querySelector(".body");
 for (let i = 0; i < 300; i++) {
-  const top = randomPosition(1,100);
-  const left = randomPosition(1,100);
+  const top = randomPosition(1,99);
+  const left = randomPosition(1,99);
   const random = Math.floor(Math.random() * sizes.length);
   const randomSize = sizes[random];
   const div = document.createElement('div');

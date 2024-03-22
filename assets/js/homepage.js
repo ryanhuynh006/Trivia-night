@@ -1,4 +1,5 @@
 const playButton = document.querySelector("#button")
+const submitButton = document.querySelector("#custom")
 const categorySelect = document.querySelector("#Categories")
 const difficultySelect = document.querySelector("#Difficulty")
 const gamemodeSelect = document.querySelector("#Gamemode")
@@ -95,6 +96,10 @@ playButton.addEventListener("click", function () {
 
     //Direct user to the next page
     window.location.href = "trivia.html?"+urlParams;
+})
+
+submitButton.addEventListener("click", function () {
+    window.open("https://docs.google.com/forms/d/e/1FAIpQLSexbl27buNwHJvnvgv6r_p_bl21m4Zq4rA7ExmpMvBIgEKFdQ/viewform?usp=sf_link", '_blank').focus();
 })
 
 //If category is set to custom remove difficulty option
