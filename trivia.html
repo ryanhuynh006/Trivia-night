@@ -15,7 +15,7 @@
   <body>
     <div class="trivia-game">
       <div id="question-container" class="justify-center flex-column">
-        <h2 id="trivia-question">Current Trivia Question</h2>
+        <h2 id="trivia-question">Loading Trivia Questions</h2>
       </div>
       <div class="grid">
         <div class="choice-container">
@@ -33,17 +33,19 @@
         </div>
       </div>
       <div class="round-time-bar" data-style="smooth" style="--duration: 60;">
-        <div>
+        <div id="countdown-bar">
           <!--Timer-->
         </div>
       </div>
 
-    <audio src="assets/sound/relaxing.mp3" id="relaxingMusic"></audio>
+    <audio src="assets/sound/relaxing.mp3" id="relaxingMusic" loop="loop"></audio>
     <audio src="assets/sound/timed.mp3" id="timedMusic"></audio>
+    <audio src="assets/sound/right.mp3" id="rightSound" ></audio>
+    <audio src="assets/sound/wrong.mp3" id="wrongSound" ></audio>
+    <audio src="assets/sound/gameOver.mp3" id="gameOver"></audio>
 
     <script src="https://bucky-cors-proxy.herokuapp.com/fetch.js"></script>
     <script src="assets/js/questions.js"></script>
-    <script src="assets/js/timer.js"></script>
     <script src="assets/js/Stars.js"></script>
       
   </body>

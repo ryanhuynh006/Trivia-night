@@ -2,7 +2,10 @@ const playButton = document.querySelector("#button")
 const submitButton = document.querySelector("#custom")
 const categorySelect = document.querySelector("#Categories")
 const difficultySelect = document.querySelector("#Difficulty")
-const gamemodeSelect = document.querySelector("#Gamemode")
+const gamemodeSelect = document.querySelector("#GameMode")
+const highscoreLabel = document.getElementById("HighScore")
+
+const yipeeSound = document.getElementById("yipee")
 
 // Returns an array of custom question
 async function getSheetQuestions(amount) {
@@ -71,7 +74,7 @@ async function getTriviaQuestions(amount, categoryNumber, difficulty) {
     return triviaArray
 }
 
-// On user click load all of the questions
+// On user play transfer data to next page
 playButton.addEventListener("click", function () {
     const categoryOption = document.querySelector("#Categories option:checked")
     const categoryNumber = categoryOption.dataset.number
@@ -89,6 +92,8 @@ playButton.addEventListener("click", function () {
         difficulty: difficulty,
         gamemode: gamemode,
     };
+
+    console.log(Object.entries(settings))
 
     const urlParams = new URLSearchParams([
         ...Object.entries(settings),
@@ -114,3 +119,38 @@ function updateDifficulty () {
 
 updateDifficulty()
 categorySelect.addEventListener("change", updateDifficulty)
+
+//Extract data from URL
+const url = new URL(window.location.href);
+const searchParams = new URLSearchParams(url.search);
+
+const score = searchParams.get("score")
+let highscore = localStorage.getItem("highscore")
+
+if (!highscore) {
+    console.log("NEW PLAYER")
+    highscore = 0;
+}
+
+function waitFor(conditionFunction) {
+    const poll = resolve => {
+        if(conditionFunction()) resolve();
+        else setTimeout(_ => poll(resolve), 400);
+    }
+    return new Promise(poll);
+}
+
+waitFor(_ => navigator.userActivation.hasBeenActive === true)
+.then(_ => {
+    highscoreLabel.textContent = "Highscore: "+score
+
+    if (score) {
+        if (highscore < score) {
+            yipeeSound.play()
+            localStorage.setItem("highscore", score)
+            alert("NEW HIGHSCORE!")
+        }
+    } else {
+        console.log("NO SCORE")
+    }
+});

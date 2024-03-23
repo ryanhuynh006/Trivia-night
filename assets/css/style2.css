@@ -65,7 +65,7 @@ button[class*="choice"] {
 }
 
 button[class*="choice"]:hover {
-  background-color: green;
+  background-color: grey;
 }
 
 .round-time-bar {

@@ -6,7 +6,35 @@ const SPREAD_ID = '1axUz3XAKfIoKwvIzTotC6ix2v5PZ_ucwpv2naZeSZsg'
 const SHEET_NUMBER = '1107320111'
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREAD_ID}/gviz/tq?tqx=out:json&headers=1&gid=${SHEET_NUMBER}`
 
-let loadedQuestions = []
+//SOUNDS
+const gameOver = document.getElementById("gameOver")
+const rightSound = document.getElementById("rightSound")
+const wrongSound = document.getElementById("wrongSound")
+
+//ELEMENTS
+const questionLabel = document.querySelector("#trivia-question")
+const anwserButtons = [
+    document.querySelector("#answer-a"),
+    document.querySelector("#answer-b"),
+    document.querySelector("#answer-c"),
+    document.querySelector("#answer-d"),
+]
+let countdownBar = document.getElementById('countdown-bar');
+
+//VARIBLES
+let width = 600; // Initial width of the bar
+
+//Extract data from URL
+const url = new URL(window.location.href);
+const searchParams = new URLSearchParams(url.search);
+
+//In future we can do away with category number for ease of use but for now who cares
+const categoryNumber = searchParams.get("categoryNumber")
+const category = searchParams.get("category")
+const difficulty = searchParams.get("difficulty")
+const gamemode = searchParams.get("gamemode")
+
+let score = 0
 
 // Returns an array of custom question
 async function loadCustomQuestions() {
@@ -30,8 +58,8 @@ async function loadCustomQuestions() {
             category: "custom",
             time: questionData[0].f,
             question: questionData[1].v,
-            answer: questionData[2].v,
-            wrongAnswers: [
+            correct_answer: questionData[2].v,
+            incorrect_answers: [
                 questionData[3].v,
                 questionData[4].v,
                 questionData[5].v,
@@ -60,42 +88,106 @@ async function loadQuestions(categoryNumber, difficulty) {
     const responce = await fetch(triviaUrl)
     
     if (!responce || !responce.ok) {
-        console.warn("Failed to load question");
+        alert("Failed to load question! (Too many requests)");
+        window.location.href = "index.html";
     }
 
     const result = await responce.json()
     const triviaArray = result.results
 
     if (triviaArray.length == 0) {
-        console.warn("No available questions!");
+        alert("No available questions please select different options!");
+        window.location.href = "index.html";
     }
 
     loadedQuestions = triviaArray
+
+    return triviaArray
 }
 
-//Extract data from URL
-const url = new URL(window.location.href);
-const searchParams = new URLSearchParams(url.search);
+let loadingNext = false
+for (let i = 0; i < anwserButtons.length; i++) {
+    const answer = anwserButtons[i]
+    answer.addEventListener("click", async function(){
+        if (!rightAnswer) {
+            console.warn("Right answer has not been added yet!");
+            return
+        }
 
-//In future we can do away with category number for ease of use but for now who cares
-const categoryNumber = searchParams.get("categoryNumber")
-const category = searchParams.get("category")
-const difficulty = searchParams.get("difficulty")
-const gamemode = searchParams.get("gamemode")
+        if (loadingNext) { return }
 
-console.log(category)
+        loadingNext = true
+        //CORRECT ANWSER
+        if (answer === rightAnswer) {
+            rightSound.play()
+            width += 50;
+            score++;
+        //WRONG ANWSER
+        }else {
+            wrongSound.play()
+            answer.style.backgroundColor = "red"
+        }
 
+        rightAnswer.style.backgroundColor = "green"
+        await new Promise(resolve => setTimeout(resolve, 1500))
+        answer.style.backgroundColor = ""
+        rightAnswer.style.backgroundColor = ""
+        nextQuestion()
+        loadingNext = false
+    })
+}
+
+function loadNewQuestions() {
+    let loadPromise
+    if (category === "Custom") {
+        console.log("Loading custom question")
+        loadPromise = loadCustomQuestions()
+    } else {
+        console.log("Loading normal question")
+        loadPromise = loadQuestions(categoryNumber, difficulty)
+    }
+    
+    return loadPromise;
+}
+
+function fixText(mystring) {
+    return mystring.replace(/&quot;/g,'"');
+}
+
+let rightAnswer
+let questionNumber = 0
+let loadedQuestions = []
 //Load the right questions based on the category
-if (categoryNumber === "custom") {
-    console.log("Loading custom question")
-    loadCustomQuestions()
-} else {
-    console.log("Loading normal question")
-    loadQuestions(categoryNumber, difficulty)
+function nextQuestion () {
+    //Get page data
+    let data = loadedQuestions[questionNumber]
+
+    if (!data) {
+        questionLabel.textContent = "Loading Trivia Questions"
+        loadNewQuestions().then(nextQuestion)
+    }
+
+    questionLabel.textContent = fixText(data.question)
+
+    let randomNumber = Math.floor(Math.random() * 4) //between 0 and 3
+    anwserClone = [...anwserButtons];
+
+    rightAnswer = anwserClone[randomNumber]
+    rightAnswer.textContent = fixText(data.correct_answer)
+    anwserClone.splice(randomNumber, 1)
+
+    for (let i = 0; i < anwserClone.length; i++) {
+        anwserClone[i].textContent = fixText(data.incorrect_answers[i])
+    }
+
+    //Head to next question
+    questionNumber++;
 }
 
+//Music config
+let music
 document.onclick= function(event) {
-    let music
+    if (music) { return }
 
     if (gamemode == "Timed") {
         music = document.getElementById("timedMusic"); 
@@ -106,3 +198,35 @@ document.onclick= function(event) {
 
     music.play();
 };
+
+if (gamemode == "Timed") {
+    let interval = setInterval(function() {
+        width--;
+        countdownBar.style.width = width + 'px';
+        if (width == 0) {
+            endGame()
+        }
+    }, 100); // Update every 0.1 seconds
+
+    function endGame() {
+        clearInterval(interval);
+        gameOver.play()
+        if (music) {
+            music.pause();
+        }
+        localStorage.setItem("score", score);
+        console.log(localStorage.getItem("score"))
+        alert("GAME OVER! SCORE: "+score)
+
+        const urlParams = new URLSearchParams([
+            ["score", score]
+        ]).toString()
+
+        window.location.href = "index.html?"+urlParams;
+    }
+} else {
+    countdownBar.style.display = "none"
+}
+
+//Wait for questions to load before starting game
+loadNewQuestions().then(nextQuestion)

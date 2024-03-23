@@ -51,6 +51,21 @@ select .categories {
     transform: none;
 }
 
+#Difficulty {
+    margin-top: 1.1%;
+    margin-bottom: 1.1%;
+}
+
+#categories {
+    margin-top: 1.1%;
+    margin-bottom: 1.1%;
+}
+
+#GameMode {
+    margin-bottom: 1.1%;
+}
+
+
 #HighScore {
     text-align: center;
     font-family: "Press Start 2P", sans-serif;
@@ -164,13 +179,13 @@ header {
 }
 
 h1 {
-    margin:auto;
+    margin:15px;
     font-size: 200%;
     font-family: "Honk", sans-serif;
 }
 
 h2 {
-    margin: 20px;
+    margin: 15px;
     font-size: 200%;
     font-family: "Honk", sans-serif;
   }
