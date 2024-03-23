@@ -142,7 +142,7 @@ function waitFor(conditionFunction) {
 
 waitFor(_ => navigator.userActivation.hasBeenActive === true)
 .then(_ => {
-    highscoreLabel.textContent = "Highscore: "+score
+    highscoreLabel.textContent = "Highscore: " + highscore
 
     if (score) {
         if (highscore < score) {
