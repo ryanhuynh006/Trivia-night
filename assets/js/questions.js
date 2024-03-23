@@ -6,6 +6,12 @@ const SPREAD_ID = '1axUz3XAKfIoKwvIzTotC6ix2v5PZ_ucwpv2naZeSZsg'
 const SHEET_NUMBER = '1107320111'
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREAD_ID}/gviz/tq?tqx=out:json&headers=1&gid=${SHEET_NUMBER}`
 
+//SOUNDS
+const gameOver = document.getElementById("gameOver")
+const rightSound = document.getElementById("rightSound")
+const wrongSound = document.getElementById("wrongSound")
+
+//ELEMENTS
 const questionLabel = document.querySelector("#trivia-question")
 const anwserButtons = [
     document.querySelector("#answer-a"),
@@ -13,6 +19,22 @@ const anwserButtons = [
     document.querySelector("#answer-c"),
     document.querySelector("#answer-d"),
 ]
+let countdownBar = document.getElementById('countdown-bar');
+
+//VARIBLES
+let width = 600; // Initial width of the bar
+
+//Extract data from URL
+const url = new URL(window.location.href);
+const searchParams = new URLSearchParams(url.search);
+
+//In future we can do away with category number for ease of use but for now who cares
+const categoryNumber = searchParams.get("categoryNumber")
+const category = searchParams.get("category")
+const difficulty = searchParams.get("difficulty")
+const gamemode = searchParams.get("gamemode")
+
+let score = 0
 
 // Returns an array of custom question
 async function loadCustomQuestions() {
@@ -83,32 +105,37 @@ async function loadQuestions(categoryNumber, difficulty) {
     return triviaArray
 }
 
+let loadingNext = false
 for (let i = 0; i < anwserButtons.length; i++) {
     const answer = anwserButtons[i]
-    answer.addEventListener("click", function(){
+    answer.addEventListener("click", async function(){
         if (!rightAnswer) {
             console.warn("Right answer has not been added yet!");
             return
         }
 
+        if (loadingNext) { return }
+
+        loadingNext = true
+        //CORRECT ANWSER
         if (answer === rightAnswer) {
-            alert("CORRECT")
-            nextQuestion()
+            rightSound.play()
+            width += 50;
+            score++;
+        //WRONG ANWSER
         }else {
-            alert("INCORRECT")
+            wrongSound.play()
+            answer.style.backgroundColor = "red"
         }
+
+        rightAnswer.style.backgroundColor = "green"
+        await new Promise(resolve => setTimeout(resolve, 1500))
+        answer.style.backgroundColor = ""
+        rightAnswer.style.backgroundColor = ""
+        nextQuestion()
+        loadingNext = false
     })
 }
-
-//Extract data from URL
-const url = new URL(window.location.href);
-const searchParams = new URLSearchParams(url.search);
-
-//In future we can do away with category number for ease of use but for now who cares
-const categoryNumber = searchParams.get("categoryNumber")
-const category = searchParams.get("category")
-const difficulty = searchParams.get("difficulty")
-const gamemode = searchParams.get("gamemode")
 
 function loadNewQuestions() {
     let loadPromise
@@ -158,8 +185,9 @@ function nextQuestion () {
 }
 
 //Music config
+let music
 document.onclick= function(event) {
-    let music
+    if (music) { return }
 
     if (gamemode == "Timed") {
         music = document.getElementById("timedMusic"); 
@@ -170,10 +198,6 @@ document.onclick= function(event) {
 
     music.play();
 };
-
-
-let countdownBar = document.getElementById('countdown-bar');
-let width = 600; // Initial width of the bar
 
 if (gamemode == "Timed") {
     let interval = setInterval(function() {
@@ -186,9 +210,19 @@ if (gamemode == "Timed") {
 
     function endGame() {
         clearInterval(interval);
-        console.log("GAME OVER")
-        alert("GAME OVER")
-        window.location.href = "index.html";
+        gameOver.play()
+        if (music) {
+            music.pause();
+        }
+        localStorage.setItem("score", score);
+        console.log(localStorage.getItem("score"))
+        alert("GAME OVER! SCORE: "+score)
+
+        const urlParams = new URLSearchParams([
+            ["score", score]
+        ]).toString()
+
+        window.location.href = "index.html?"+urlParams;
     }
 } else {
     countdownBar.style.display = "none"
