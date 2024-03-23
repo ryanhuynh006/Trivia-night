@@ -42,7 +42,7 @@ h2 {
 
 .choice-container {
   position: relative;
-  /*display: flex;*/
+  display: flex;
   flex-wrap: wrap;
   box-sizing: border-box;
   padding: 15px;
