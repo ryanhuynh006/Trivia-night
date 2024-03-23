@@ -13,26 +13,29 @@
     <link rel="stylesheet" href="./assets/css/style2.css" />
   </head>
   <body>
-      <div class="trivia-game">
-          <div id="question-container" class="justify-center flex-column">
-              <h2 id="trivia-question">Loading Trivia Questions</h2>
-              <div class="choice-container">
-                  <button class="choice" id = "answer-a">Answer A</button>
-              </div>
-              <div class="choice-container">
-                  <button class="choice" id = "answer-b">Answer B</button>
-              </div>
-              <div class="choice-container">
-                  <button class="choice" id = "answer-c">Answer C</button>
-              </div>
-              <div class="choice-container">
-                  <button class="choice" id = "answer-d">Answer D</button>
-              </div>
-          </div>
+    <div class="trivia-game">
+      <div id="question-container" class="justify-center flex-column">
+        <h2 id="trivia-question">Loading Trivia Questions</h2>
       </div>
-      <!--Timer-->
+      <div class="grid">
+        <div class="choice-container">
+          <button class="choice answer-a">Answer A</button>
+        </div>
+        <div class="choice-container">
+          <button class="choice answer-b">Answer B</button>
+        </div>
+        <div class="choice-container">
+          <button class="choice answer-c">Answer C</button>
+        </div>
+        <div class="choice-container">
+          <button class="choice amswer-d">Answer D</button>
+        </div>
+        </div>
+      </div>
       <div class="round-time-bar" data-style="smooth" style="--duration: 60;">
-        <div id="countdown-bar"></div>
+        <div id="countdown-bar">
+          <!--Timer-->
+        </div>
       </div>
 
     <audio src="assets/sound/relaxing.mp3" id="relaxingMusic" loop="loop"></audio>

@@ -17,10 +17,3 @@
 .round-time-bar[data-style="smooth"] div {
     animation: roundtime calc(var(--duration) * 1s) linear forwards;
   }
-
-@keyframes roundtime {
-    to {
-      /* More performant than `width` */
-      transform: scaleX(0);
-    }
-  }
