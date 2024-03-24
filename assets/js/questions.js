@@ -13,7 +13,7 @@ const wrongSound = document.getElementById("wrongSound")
 
 //ELEMENTS
 const questionLabel = document.querySelector("#trivia-question")
-const anwserButtons = [
+const answerButtons = [
     document.querySelector("#answer-a"),
     document.querySelector("#answer-b"),
     document.querySelector("#answer-c"),
@@ -38,12 +38,12 @@ let score = 0
 
 // Returns an array of custom question
 async function loadCustomQuestions() {
-    const responce = await fetch(SHEET_URL)
-    let jsonResponce = await responce.text()
-    jsonResponce = jsonResponce.match("{.+}")
-    jsonResponce = jsonResponce[0].replace(/\\/g, "")
+    const response = await fetch(SHEET_URL)
+    let jsonResponse = await response.text()
+    jsonResponse = jsonResponse.match("{.+}")
+    jsonResponse = jsonResponse[0].replace(/\\/g, "")
 
-    const sheetData = JSON.parse(jsonResponce);
+    const sheetData = JSON.parse(jsonResponse);
     const sheetDataRows = sheetData.table.rows;
 
     let sheetQuestions = [];
@@ -77,7 +77,7 @@ async function loadCustomQuestions() {
 // Returns an array of trivia questions
 async function loadQuestions(categoryNumber, difficulty) {
     //If there is no category set it to blank so it  doesn't try to load an invalid category
-    let category = ""
+    let category = " "
     if (categoryNumber) {
         category = "&category=" + categoryNumber
     }
@@ -85,14 +85,14 @@ async function loadQuestions(categoryNumber, difficulty) {
     //Properly configure trivia url to get the data we want
     const triviaUrl = `https://opentdb.com/api.php?amount=${AMOUNT_OF_QUESTIONS}&type=multiple&difficulty=${difficulty.toLowerCase()}` + category;
 
-    const responce = await fetch(triviaUrl)
+    const response = await fetch(triviaUrl)
     
-    if (!responce || !responce.ok) {
+    if (!response || !response.ok) {
         alert("Failed to load question! (Too many requests)");
         window.location.href = "index.html";
     }
 
-    const result = await responce.json()
+    const result = await response.json()
     const triviaArray = result.results
 
     if (triviaArray.length == 0) {
@@ -106,8 +106,8 @@ async function loadQuestions(categoryNumber, difficulty) {
 }
 
 let loadingNext = false
-for (let i = 0; i < anwserButtons.length; i++) {
-    const answer = anwserButtons[i]
+for (let i = 0; i < answerButtons.length; i++) {
+    const answer = answerButtons[i]
     answer.addEventListener("click", async function(){
         if (!rightAnswer) {
             console.warn("Right answer has not been added yet!");
@@ -117,12 +117,12 @@ for (let i = 0; i < anwserButtons.length; i++) {
         if (loadingNext) { return }
 
         loadingNext = true
-        //CORRECT ANWSER
+        //CORRECT ANSWER
         if (answer === rightAnswer) {
             rightSound.play()
             width += 50;
             score++;
-        //WRONG ANWSER
+        //WRONG ANSWER
         }else {
             wrongSound.play()
             answer.style.backgroundColor = "red"
@@ -170,14 +170,14 @@ function nextQuestion () {
     questionLabel.textContent = fixText(data.question)
 
     let randomNumber = Math.floor(Math.random() * 4) //between 0 and 3
-    anwserClone = [...anwserButtons];
+    answerClone = [...answerButtons];
 
-    rightAnswer = anwserClone[randomNumber]
+    rightAnswer = answerClone[randomNumber]
     rightAnswer.textContent = fixText(data.correct_answer)
-    anwserClone.splice(randomNumber, 1)
+    answerClone.splice(randomNumber, 1)
 
-    for (let i = 0; i < anwserClone.length; i++) {
-        anwserClone[i].textContent = fixText(data.incorrect_answers[i])
+    for (let i = 0; i < answerClone.length; i++) {
+        answerClone[i].textContent = fixText(data.incorrect_answers[i])
     }
 
     //Head to next question

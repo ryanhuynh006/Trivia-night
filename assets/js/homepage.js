@@ -9,12 +9,12 @@ const yipeeSound = document.getElementById("yipee")
 
 // Returns an array of custom question
 async function getSheetQuestions(amount) {
-    const responce = await fetch(SHEET_URL)
-    let jsonResponce = await responce.text()
-    jsonResponce = jsonResponce.match("{.+}")
-    jsonResponce = jsonResponce[0].replace(/\\/g, "")
+    const response = await fetch(SHEET_URL)
+    let jsonResponse = await response.text()
+    jsonResponse = jsonResponse.match("{.+}")
+    jsonResponse = jsonResponse[0].replace(/\\/g, "")
 
-    const sheetData = JSON.parse(jsonResponce);
+    const sheetData = JSON.parse(jsonResponse);
     const sheetDataRows = sheetData.table.rows;
 
     let sheetQuestions = [];
@@ -56,14 +56,14 @@ async function getTriviaQuestions(amount, categoryNumber, difficulty) {
     //Properly configure trivia url to get the data we want
     const triviaUrl = `https://opentdb.com/api.php?amount=${amount}&type=multiple&difficulty=${difficulty}`+category;
 
-    const responce = await fetch(triviaUrl)
+    const response = await fetch(triviaUrl)
     
-    if (!responce || !responce.ok) {
+    if (!response || !response.ok) {
         alert("Failed to load questions (try refreshing)");
         return false
     }
 
-    const result = await responce.json()
+    const result = await response.json()
     const triviaArray = result.results
 
     if (triviaArray.length == 0) {
