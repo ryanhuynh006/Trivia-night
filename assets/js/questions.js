@@ -151,7 +151,8 @@ function loadNewQuestions() {
 }
 
 function fixText(mystring) {
-    return mystring.replace(/&quot;/g,'"');
+    mystring = mystring.replace(/&quot;/g,'');
+    return mystring.replace(/&#\d+;/g,'');
 }
 
 let rightAnswer
