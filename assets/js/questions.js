@@ -7,7 +7,7 @@ const SHEET_NUMBER = '1107320111'
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SPREAD_ID}/gviz/tq?tqx=out:json&headers=1&gid=${SHEET_NUMBER}`
 
 //SOUNDS
-const gameOver = document.getElementById("gameOver")
+const gameOverSound = document.getElementById("gameOver")
 const rightSound = document.getElementById("rightSound")
 const wrongSound = document.getElementById("wrongSound")
 
@@ -19,10 +19,12 @@ const answerButtons = [
     document.querySelector("#answer-c"),
     document.querySelector("#answer-d"),
 ]
-let countdownBar = document.getElementById('countdown-bar');
+const countdownBar = document.getElementById('countdown-bar');
+const gameOverModal = document.getElementById('game-over-modal')
+const gameOverText = document.getElementById("game-over-text")
 
 //VARIBLES
-let width = 600; // Initial width of the bar
+let width = 20; // Initial width of the bar
 
 //Extract data from URL
 const url = new URL(window.location.href);
@@ -35,6 +37,7 @@ const difficulty = searchParams.get("difficulty")
 const gamemode = searchParams.get("gamemode")
 
 let score = 0
+let modalActive = false
 
 // Returns an array of custom question
 async function loadCustomQuestions() {
@@ -211,23 +214,28 @@ if (gamemode == "Timed") {
 
     function endGame() {
         clearInterval(interval);
-        gameOver.play()
+
         if (music) {
+            gameOverSound.play()
             music.pause();
         }
         localStorage.setItem("score", score);
         console.log(localStorage.getItem("score"))
-        alert("GAME OVER! SCORE: "+score)
 
-        const urlParams = new URLSearchParams([
-            ["score", score]
-        ]).toString()
-
-        window.location.href = "index.html?"+urlParams;
+        gameOverText.textContent = "Game Over! Score: "+ score
+        gameOverModal.style.display = "block"
     }
 } else {
     countdownBar.style.display = "none"
 }
+
+gameOverModal.addEventListener("click", function(){
+    const urlParams = new URLSearchParams([
+        ["score", score]
+    ]).toString()
+
+    window.location.href = "index.html?"+urlParams;
+})
 
 //Wait for questions to load before starting game
 loadNewQuestions().then(nextQuestion)
