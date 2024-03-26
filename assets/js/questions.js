@@ -24,7 +24,7 @@ const gameOverModal = document.getElementById('game-over-modal')
 const gameOverText = document.getElementById("game-over-text")
 
 //VARIBLES
-let width = 20; // Initial width of the bar
+let width = 600; // Initial width of the bar
 
 //Extract data from URL
 const url = new URL(window.location.href);
