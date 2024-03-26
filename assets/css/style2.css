@@ -29,7 +29,7 @@ h2 {
 }
 
 #trivia-question {
-  font-family: "Pixelify Sans", sans-serif;
+  font-family: "Georgia", sans-serif;
   font-size: 35px;
   
 }
@@ -57,7 +57,7 @@ button[class*="choice"] {
   width: 100%;
   height: 100%;
   display: flex;
-  font-family: "Pixelify Sans", sans-serif;
+  font-family: "Georgia", sans-serif;
   font-size: 20px;
   text-align: center;
   background-color: #9E0E9E;
@@ -65,7 +65,7 @@ button[class*="choice"] {
 }
 
 button[class*="choice"]:hover {
-  background-color: grey;
+  background-color: green;
 }
 
 .round-time-bar {
